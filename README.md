@@ -14,4 +14,4 @@ And there are 350 'dummy' leaves that only collide with the floor of the physics
 
 
 
-![Leaf Screenshot] (/screenshot1.jpeg)
+![Leaf Screenshot](/screenshot1.jpeg)
