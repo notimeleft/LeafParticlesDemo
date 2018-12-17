@@ -15,8 +15,9 @@
 		866A7A3C21C250B400E28150 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 866A7A3A21C250B400E28150 /* Main.storyboard */; };
 		866A7A3E21C250B600E28150 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 866A7A3D21C250B600E28150 /* Assets.xcassets */; };
 		866A7A4121C250B600E28150 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 866A7A3F21C250B600E28150 /* LaunchScreen.storyboard */; };
-		8674237F21C51CF500BBDEED /* redLeaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 8674237E21C51CF500BBDEED /* redLeaf.png */; };
-		8674238421C5468700BBDEED /* screenshot1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 8674238321C5468700BBDEED /* screenshot1.jpeg */; };
+		8674239421C7961200BBDEED /* yellowLeaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 8674239321C7961200BBDEED /* yellowLeaf.png */; };
+		8674239621C7961700BBDEED /* orangeLeaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 8674239521C7961700BBDEED /* orangeLeaf.png */; };
+		8674239821C7961C00BBDEED /* redLeaf.png in Resources */ = {isa = PBXBuildFile; fileRef = 8674239721C7961C00BBDEED /* redLeaf.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,9 +31,9 @@
 		866A7A3D21C250B600E28150 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		866A7A4021C250B600E28150 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		866A7A4221C250B600E28150 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8674237E21C51CF500BBDEED /* redLeaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redLeaf.png; sourceTree = "<group>"; };
-		8674238021C5438C00BBDEED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		8674238321C5468700BBDEED /* screenshot1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = screenshot1.jpeg; sourceTree = "<group>"; };
+		8674239321C7961200BBDEED /* yellowLeaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellowLeaf.png; sourceTree = "<group>"; };
+		8674239521C7961700BBDEED /* orangeLeaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orangeLeaf.png; sourceTree = "<group>"; };
+		8674239721C7961C00BBDEED /* redLeaf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redLeaf.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,22 +73,13 @@
 				866A7A3821C250B400E28150 /* GameViewController.swift */,
 				866A7A3A21C250B400E28150 /* Main.storyboard */,
 				866A7A3D21C250B600E28150 /* Assets.xcassets */,
-				8674238021C5438C00BBDEED /* README.md */,
 				866A7A3F21C250B600E28150 /* LaunchScreen.storyboard */,
 				866A7A4221C250B600E28150 /* Info.plist */,
-				8674238221C5468700BBDEED /* images */,
+				8674239321C7961200BBDEED /* yellowLeaf.png */,
+				8674239521C7961700BBDEED /* orangeLeaf.png */,
+				8674239721C7961C00BBDEED /* redLeaf.png */,
 			);
 			path = leafParticlesDemo;
-			sourceTree = "<group>";
-		};
-		8674238221C5468700BBDEED /* images */ = {
-			isa = PBXGroup;
-			children = (
-				8674237E21C51CF500BBDEED /* redLeaf.png */,
-				8674238321C5468700BBDEED /* screenshot1.jpeg */,
-			);
-			name = images;
-			path = ../../../Downloads/images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -149,10 +141,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				866A7A3C21C250B400E28150 /* Main.storyboard in Resources */,
-				8674237F21C51CF500BBDEED /* redLeaf.png in Resources */,
-				8674238421C5468700BBDEED /* screenshot1.jpeg in Resources */,
+				8674239821C7961C00BBDEED /* redLeaf.png in Resources */,
+				8674239421C7961200BBDEED /* yellowLeaf.png in Resources */,
 				866A7A3321C250B400E28150 /* GameScene.sks in Resources */,
 				866A7A3E21C250B600E28150 /* Assets.xcassets in Resources */,
+				8674239621C7961700BBDEED /* orangeLeaf.png in Resources */,
 				866A7A4121C250B600E28150 /* LaunchScreen.storyboard in Resources */,
 				866A7A3521C250B400E28150 /* Actions.sks in Resources */,
 			);
@@ -316,7 +309,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A5P538JUR3;
 				INFOPLIST_FILE = leafParticlesDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -335,7 +328,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A5P538JUR3;
 				INFOPLIST_FILE = leafParticlesDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

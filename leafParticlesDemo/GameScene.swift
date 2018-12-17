@@ -10,22 +10,43 @@ import SpriteKit
 import GameplayKit
 import CoreMotion
 //haha...spent like an hour debugging collisions. The categories have to be a power of 2 to be unique, not just any random 32-bit Int. Doy.
-struct CollisionCategory{
-    static let floor = UInt32(1)
-    static let leaf = UInt32(2)
-    static let dummyLeaf = UInt32(4)
+enum CollisionCategory: UInt32{
+    case floor = 1
+    case leaf = 2
+    case dummyLeaf = 4
+}
+
+//define either a real leaf or a dummy leaf
+
+class LeafType {
+    let typeName: String
+    let categoryBitmask: UInt32
+    let collsionBitmask: UInt32
+    let bounciness: CGFloat
+    init(type: String){
+        if type == "realLeaf" {
+            self.typeName = type
+            categoryBitmask = CollisionCategory.leaf.rawValue
+            collsionBitmask = CollisionCategory.leaf.rawValue | CollisionCategory.floor.rawValue
+            bounciness = 0.2
+        } else {
+            self.typeName = "dummyLeaf"
+            categoryBitmask = CollisionCategory.dummyLeaf.rawValue
+            collsionBitmask = CollisionCategory.floor.rawValue
+            bounciness = 0.0
+        }
+    }
 }
 
 class GameScene: SKScene {
     
-    
-    public var leafPositions: [CGPoint]?
-    public var dummyLeafPositions: [CGPoint]?
+    var leafPositions: [CGPoint]?
+    var dummyLeafPositions: [CGPoint]?
+    var motionData: CMMotionManager?
+    var leafTextures: [SKTexture]?
     
     private var gravityEnabled = false
-    
-    public var motionData: CMMotionManager?
-    
+
     private var lastPointTouched = CGPoint(x:-5000,y:-5000)
     private var currentPointTouched = CGPoint(x:-5000,y:-5000)
     
@@ -33,17 +54,32 @@ class GameScene: SKScene {
         return CGPoint(x: self.lastPointTouched.x - currentPointTouched.x, y: lastPointTouched.y - currentPointTouched.y)
     }
     
+    //first time convenience initializers saved my bum! It's easier to encapsulate all the details of the game scene in here, rather than trying to set everything elsewhere.
+    convenience init?(leafPositions: [CGPoint], dummyLeafPositions: [CGPoint],motionData: CMMotionManager){
+        self.init(fileNamed: "GameScene")
+        self.leafPositions = leafPositions
+        self.dummyLeafPositions = dummyLeafPositions
+        self.motionData = motionData
+        self.leafTextures = [
+        SKTexture(imageNamed: "redLeaf"),
+        SKTexture(imageNamed: "orangeLeaf"),
+        SKTexture(imageNamed: "yellowLeaf"),
+        ]
+    }
+    
+    
+    
     override func didMove(to view: SKView) {
         
 //        let bottomLeft = CGPoint(x: -view.frame.width / 2.0, y: -view.frame.height / 2.0 + 20)
 //        let bottomRight = CGPoint(x: view.frame.width / 2.0, y: -view.frame.height / 2.0 + 20)
         
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
-        self.physicsBody?.categoryBitMask = CollisionCategory.floor
-        self.physicsBody?.collisionBitMask = CollisionCategory.leaf
+        self.physicsBody?.categoryBitMask = CollisionCategory.floor.rawValue
+        self.physicsBody?.collisionBitMask = CollisionCategory.leaf.rawValue
         self.physicsWorld.gravity = CGVector(dx: 0, dy: -0.2)
         
-        makeNewLeaves()
+        makeBothLeafTypes()
     }
     
     func gravity(enabled: Bool){
@@ -54,50 +90,36 @@ class GameScene: SKScene {
     }
     
     
-    func makeNewLeaves(){
-        let texture = SKTexture(imageNamed: "redLeaf")
-        if let validPositions = leafPositions {
-            
-            for position in validPositions {
-                
-                let leaf = SKSpriteNode(texture: texture)
-                //let leaf = SKSpriteNode(color: UIColor.red, size: CGSize(width: 3, height: 7))
-                leaf.name = "realLeaf"
-                leaf.position = position
-                leaf.physicsBody = SKPhysicsBody(circleOfRadius: 4)
-                
-                leaf.physicsBody?.categoryBitMask = CollisionCategory.leaf
-                leaf.physicsBody?.collisionBitMask = CollisionCategory.floor | CollisionCategory.leaf
-                
-                //leaf.physicsBody?.collisionBitMask = CollisionCategory.floor
-                leaf.physicsBody?.affectedByGravity = false
-                leaf.physicsBody?.restitution = 0.2
-                addChild(leaf)
-            }
-            
-        }
+    func makeBothLeafTypes(){
+        let realLeaves = LeafType(type: "realLeaf")
+        let dummyLeaves = LeafType(type: "dummyLeaf")
+        makeNewLeaves(leafType: realLeaves, leafPositions: self.leafPositions!)
+        makeNewLeaves(leafType: dummyLeaves, leafPositions: self.dummyLeafPositions!)
+    }
+    
+    
+    func makeNewLeaves(leafType: LeafType, leafPositions: [CGPoint]){
         
-        if let validDummies = dummyLeafPositions {
-            for position in validDummies {
-                
-                let leaf = SKSpriteNode(texture: texture)
-                //let leaf = SKSpriteNode(color: UIColor.white, size: CGSize(width: 3, height: 7))
-                leaf.name = "dummyLeaf"
-                leaf.position = position
-                leaf.physicsBody = SKPhysicsBody(circleOfRadius: 4)
-                //leaf.physicsBody = SKPhysicsBody(rectangleOf: leaf.size)
-                leaf.physicsBody?.categoryBitMask = CollisionCategory.dummyLeaf
-                leaf.physicsBody?.collisionBitMask = CollisionCategory.floor
-                leaf.physicsBody?.affectedByGravity = false
-                leaf.physicsBody?.restitution = 0.0
-                addChild(leaf)
-            }
+        for position in leafPositions {
+            //randomize leaf color a bit
+            let texture = leafTextures?[Int.random(in: 0...2)]
+            let leaf = SKSpriteNode(texture: texture, size: CGSize(width: 6, height: 6))
+            leaf.name = leafType.typeName
+            leaf.position = position
+            leaf.physicsBody = SKPhysicsBody(circleOfRadius: 6)
+            leaf.physicsBody?.categoryBitMask = leafType.categoryBitmask
+            leaf.physicsBody?.collisionBitMask = leafType.collsionBitmask
+            leaf.physicsBody?.affectedByGravity = false
+            leaf.physicsBody?.restitution = leafType.bounciness
+            addChild(leaf)
         }
     }
     
+    
+    
     func cleanUpLeaves(){
         removeAllChildren()
-        makeNewLeaves()
+        makeBothLeafTypes()
         //hack-y solution to ensure that resetting the scene will not affect the gravity status of any leaves in the initial loading
         lastPointTouched = CGPoint(x:-5000,y:-5000)
         currentPointTouched = CGPoint(x:-5000,y:-5000)
@@ -115,9 +137,8 @@ class GameScene: SKScene {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print(currentPointTouched.x - lastPointTouched.x, currentPointTouched.y - lastPointTouched.y)
-        //currentPointTouched = CGPoint.zero
-        //lastPointTouched = CGPoint.zero
+        lastPointTouched = CGPoint.zero
+        currentPointTouched = CGPoint(x:-5000,y: -5000)
     }
     
     func proximityOfTwoPoints(for distance: CGFloat, point1: CGPoint, point2: CGPoint) -> Bool{
@@ -128,10 +149,13 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         
         //if gravity has been enabled, the 'wind' force must fight against it, so it has to be greater
-        let gravityFactor : CGFloat = gravityEnabled ? 600 : 1000
+        let gravityFactor : CGFloat = gravityEnabled ? 100 : 300
+        
+        let accelerationData = motionData?.accelerometerData
         
         for child in children {
             //only apply the 'wind' force to a leaf that is close to the last touched point
+            //hmm...maybe for larger screens, we want proximity to be greater as well. For smaller screens, 40 pts would be more than enough for our butterfingers
             if proximityOfTwoPoints(for: 40.0, point1: currentPointTouched, point2: child.position) {
                 //once a leaf has been affected by the wind (i.e torn off a branch), it must deal with gravity
                 if !gravityEnabled {
@@ -140,21 +164,17 @@ class GameScene: SKScene {
                 //we shouldn't let wind force get too large
                 let xScale = -pointDifference.x/gravityFactor
                 let yScale = -pointDifference.y/gravityFactor
-                child.physicsBody?.applyImpulse(CGVector(dx: xScale < 50.0 ? xScale : 50.0, dy: yScale < 50.0 ? yScale : 50.0))
+                child.physicsBody?.applyImpulse(CGVector(dx: xScale < 250.0 ? xScale : 250.0, dy: yScale < 250.0 ? yScale : 250.0))
             }
             
-        }
-        
-        if !gravityEnabled { return }
-        //tilt screen to change the impulse force that simulates gravity. We could just change WorldPhysics' gravity, but somehow this is more efficient for the CPU. I think. 
-        if let validData = motionData?.accelerometerData{
-            for child in children {
-                if child.physicsBody?.affectedByGravity == false {
-                    return
+            //for those leaves that have been 'plucked', they must now be affected by the force of gravity, whether from the world gravity or from device rotation's simulated gravity
+            if child.physicsBody?.affectedByGravity == true {
+                if let validData = accelerationData{
+                    child.physicsBody?.applyImpulse(CGVector(dx:
+                        validData.acceleration.x / 150.0 , dy: validData.acceleration.y / 150.0))
                 }
-                child.physicsBody?.applyImpulse(CGVector(dx:
-                    validData.acceleration.x / 150.0 , dy: validData.acceleration.y / 150.0))
             }
+            
         }
     }
 }
