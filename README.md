@@ -1,10 +1,18 @@
 # leaf particles! 
 
+
 This sample project simulates a box in which 500 leaf sprites are generated. 
 
+
+![Leaf gif](https://thumbs.gfycat.com/MenacingDelectableDromedary-size_restricted.gif)
+
+
 Shake the device, or touch the 'gravity' button, to enable gravity. 
+
 Rotate the screen to change the direction of gravity.  
+
 Draw on the screen to create a 'wind' force which affects nearby leaves. 
+
 Reset the scene by touching the 'new' button
 
 
@@ -18,4 +26,4 @@ And there are 350 'dummy' leaves that only collide with the floor of the physics
 
 
 
-![Leaf Screenshot](/screenshot1.jpeg)
+
