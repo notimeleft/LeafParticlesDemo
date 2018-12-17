@@ -1,6 +1,6 @@
 # leaf particles! 
 
-Run Instructions: Download project, open 'leafParticlesDemo.xcodeproj' in xcode 10.1 or above. Run on a device or simulater with iOS 12.0 or above.  
+Run Instructions: Download project, open 'leafParticlesDemo.xcodeproj' in xcode 10.1 or above. Run on a device or simulator with iOS 12.0 or above.  
 
 This mini project simulates a box in which 500 leaf sprites are generated. 
 
